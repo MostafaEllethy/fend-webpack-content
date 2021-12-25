@@ -3,8 +3,12 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 
 module.exports = {
-    entry: './src/client/index.js',
     mode: 'production',
+    entry: './src/client/index.js',
+    output: {
+        libraryTarget: 'var',
+        library: 'Client'
+    },
     plugins: [
         new HtmlWebpackPlugin({
             template: "./src/client/views/index.html",
