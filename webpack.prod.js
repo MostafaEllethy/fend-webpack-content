@@ -1,11 +1,14 @@
+const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const { GenerateSW } = require('workbox-webpack-plugin');
 
 module.exports = {
     mode: 'production',
     entry: './src/client/index.js',
     output: {
+        path: path.resolve(process.cwd(), 'dist'),
         libraryTarget: 'var',
         library: 'Client'
     },
@@ -13,10 +16,10 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./src/client/views/index.html",
             filename: "./index.html",
-            minify: true
         }),
-        new CleanWebpackPlugin(),
-        new BundleAnalyzerPlugin()
+        new MiniCssExtractPlugin(),
+        new GenerateSW(),
+        new CleanWebpackPlugin()
     ],
     module: {
         rules: [
@@ -29,7 +32,7 @@ module.exports = {
                 test: /\.s[ac]ss$/i,
                 use: [
                     // Creates `style` nodes from JS strings
-                    "style-loader",
+                    MiniCssExtractPlugin.loader,
                     // Translates CSS into CommonJS
                     "css-loader",
                     // Compiles Sass to CSS
